@@ -12,13 +12,16 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: echo ${{ inputs.github-sha }}
-      shell: bash
-    - run: echo $(git show --no-patch --format="%P" ${{ inputs.github-sha }} | wc -w)
-      shell: bash
     - id: merge-commit-checker
       run: |
-        if [[ $(git show --no-patch --format="%P" ${{ inputs.github-sha }} | wc -w) == 2 ]]; then
+        parents=$(git show --no-patch --format="%P" ${{ inputs.github-sha }})
+        parent_count=$(echo "$parents" | wc -w)
+
+        echo $parents
+        echo $parent_count
+
+
+        if [[ $parent_count -gt 1 ]]; then
           echo "is-merge-commit=true" >> $GITHUB_OUTPUT
         else
           echo "is-merge-commit=false" >> $GITHUB_OUTPUT
