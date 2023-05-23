@@ -12,9 +12,11 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - run: echo ${{ inputs.github-sha }}
+    - run: echo $(git show --no-patch --format="%P" ${{ inputs.github-sha }} | wc -w))
     - id: merge-commit-checker
       run: |
-        if [[ $(git show --no-patch --format="%P" ${{ inputs.github-sha }} | wc -w) == "2" ]]; then
+        if [[ $(git show --no-patch --format="%P" ${{ inputs.github-sha }} | wc -w) == 2 ]]; then
           echo "is-merge-commit=true" >> $GITHUB_OUTPUT
         else
           echo "is-merge-commit=false" >> $GITHUB_OUTPUT
