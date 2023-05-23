@@ -1,0 +1,22 @@
+name: 'Check if merge commit'
+description: 'Checks if the commit for a given SHA is a merge commit'
+inputs:
+  github-sha:  
+    description: 'SHA of the commit to check'
+    required: false
+    default: $GITHUB_SHA
+outputs:
+  is-merge-commit:
+    description: "Boolean value representing if the commit is a merge commit"
+    value: ${{ steps.merge-commit-checker.outputs.is-merge-commit}}
+runs:
+  using: "composite"
+  steps:
+    - id: merge-commit-checker
+      run: |
+        if [[ $(git show --no-patch --format="%P" ${{ inputs.github-sha }} | wc -w) == "2" ]]; then
+          echo "is-merge-commit=true" >> $GITHUB_OUTPUT
+        else
+          echo "is-merge-commit=false" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
