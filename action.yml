@@ -17,10 +17,6 @@ runs:
         parents=$(git show --no-patch --format="%P" ${{ inputs.github-sha }})
         parent_count=$(echo "$parents" | wc -w)
 
-        echo $parents
-        echo $parent_count
-
-
         if [[ $parent_count -gt 1 ]]; then
           echo "is-merge-commit=true" >> $GITHUB_OUTPUT
         else
