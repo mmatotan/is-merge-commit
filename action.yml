@@ -13,7 +13,9 @@ runs:
   using: "composite"
   steps:
     - run: echo ${{ inputs.github-sha }}
-    - run: echo $(git show --no-patch --format="%P" ${{ inputs.github-sha }} | wc -w))
+      shell: bash
+    - run: echo $(git show --no-patch --format="%P" ${{ inputs.github-sha }} | wc -w)
+      shell: bash
     - id: merge-commit-checker
       run: |
         if [[ $(git show --no-patch --format="%P" ${{ inputs.github-sha }} | wc -w) == 2 ]]; then
